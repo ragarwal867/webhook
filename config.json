@@ -1,0 +1,5 @@
+{
+    "server_port": 5555,
+    "response_codes": [200],
+    "randomize": true
+}
