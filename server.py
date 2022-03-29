@@ -101,4 +101,4 @@ if __name__ == '__main__':
     scan_config()
     threading.Thread(target=interval_function).start()
     setup()
-    app.run(host="0.0.0.0", port=80)
+    app.run()
