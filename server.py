@@ -101,7 +101,13 @@ def hello_world():
 def send_data(inbox):
     print(request.data)
     response_body = get_response_body()
+    create_inbox(inbox)
+    msg_file = int(time.time() * 1000)
+    h = open(os.path.join('inboxes', inbox, str(msg_file)), 'wb')
+    h.write(request.data)
+    h.close()
     return response_body, 403, {'Content-Type': 'application/json'}
+    
 
 @app.route('/list')
 def list_inboxes():
