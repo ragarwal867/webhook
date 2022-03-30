@@ -23,6 +23,58 @@ config = {}
 inboxes = set()
 round_robin_counter = 0
 
+responseBodyArray = [
+    {
+        "code": "601",
+        "error": {
+            "type": "FORBIDDEN",
+            "message": "Incorrect number of variables for the template provided"
+        }
+    },
+    {
+        "code": "602",
+        "error": {
+            "type": "FORBIDDEN",
+            "message": "Incorrect number of variables for the template provided"
+        }
+    },
+    {
+        "code": "603",
+        "error": {
+            "type": "FORBIDDEN",
+            "message": "Maximum length limit for string variables (30) exceeded"
+        }
+    },
+    {
+        "code": "604",
+        "error": {
+            "type": "FORBIDDEN",
+            "message": "URL is invalid, make sure you are providing valid protocol and host"
+        }
+    },
+    {
+        "code": "605",
+        "error": {
+            "type": "FORBIDDEN",
+            "message": "The template with similar values is already registered"
+        }
+    },
+    {
+        "code": "606",
+        "error": {
+            "type": "FORBIDDEN",
+            "message": "The provided MSISDN is invalid"
+        }
+    },
+    {
+        "code": "607",
+        "error": {
+            "type": "FORBIDDEN",
+            "message": "An invalid token was provided"
+        }
+    } 
+] 
+
 def setup():
     global inboxes
     # Create the inboxes directory
@@ -34,12 +86,12 @@ def create_inbox(inbox):
     os.makedirs(os.path.join("inboxes", inbox), exist_ok=True)
     inboxes.add(inbox)
 
-def get_response_code():
+
+def get_response_body():
     global round_robin_counter
-    response_codes = config.get("response_codes", [200])
-    response_code = response_codes[round_robin_counter % len(response_codes)]
+    response_body = responseBodyArray[round_robin_counter % len(responseBodyArray)]
     round_robin_counter += 1
-    return response_code
+    return response_body
 
 @app.route('/')
 def hello_world():
@@ -48,16 +100,8 @@ def hello_world():
 @app.route('/send/<inbox>', methods=['POST'])
 def send_data(inbox):
     print(request.data)
-    response_code = get_response_code()
-    if response_code == 429:
-        return 'Error', 429
-    elif response_code == 200: 
-        create_inbox(inbox)
-        msg_file = int(time.time() * 1000)
-        h = open(os.path.join('inboxes', inbox, str(msg_file)), 'wb')
-        h.write(request.data)
-        h.close()
-        return 'OK'
+    response_body = get_response_body()
+    return response_body, 403, {'Content-Type': 'application/json'}
 
 @app.route('/list')
 def list_inboxes():
