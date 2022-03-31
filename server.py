@@ -106,7 +106,7 @@ def send_data(inbox):
     h = open(os.path.join('inboxes', inbox, str(msg_file)), 'wb')
     h.write(request.data)
     h.close()
-    return response_body, 200, {'Content-Type': 'application/json'}
+    return response_body, 403, {'Content-Type': 'application/json'}
     
 
 @app.route('/list')
