@@ -24,6 +24,13 @@ inboxes = set()
 round_robin_counter = 0
 
 responseBodyArray = [
+     {
+        "code": "200",
+        "error": {
+            "type": "Success",
+            "message": "success"
+        }
+    },
     {
         "code": "601",
         "error": {
@@ -106,7 +113,10 @@ def send_data(inbox):
     h = open(os.path.join('inboxes', inbox, str(msg_file)), 'wb')
     h.write(request.data)
     h.close()
-    return response_body, 403, {'Content-Type': 'application/json'}
+    if response_body['code'] == '200'
+        response_body, 200, {'Content-Type': 'application/json'}
+    else    
+        return response_body, 403, {'Content-Type': 'application/json'}
     
 
 @app.route('/list')
